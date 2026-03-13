@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>LỊCH SỬ 11 | KIỆT TÁC ÔN TẬP</title>
+    <style>
+        /* ===== RESET & BIẾN MÀU ===== */
+        :root {
+            --primary: #0a0f1e;
+            --secondary: #1a1f30;
+            --accent: #c8a95f;
+            --accent-light: #e5c687;
+            --accent-dark: #a88b4a;
+            --text: #ffffff;
+            --text-secondary: #b8b9c4;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --gradient-1: linear-gradient(135deg, #0a0f1e, #1a1f30);
+            --gradient-2: linear-gradient(135deg, #c8a95f, #e5c687);
+            --shadow: 0 20px 40px rgba(0,0,0,0.4);
+            --shadow-sm: 0 10px 20px rgba(0,0,0,0.2);
+            --border-radius: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ===== FONTS ===== */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ===== HIỆU ỨNG NỀN ĐỘNG ===== */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(200, 169, 95, 0.03) 0%, transparent 30%),
+                        radial-gradient(circle at 80% 70%, rgba(200, 169, 95, 0.03) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: 1;
+            animation: noiseMove 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes noiseMove {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+            100% { transform: scale(1.1) rotate(1deg); opacity: 0.8; }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 15px 60px, rgba(255,255,255,0.8), rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 72px 430px, rgba(255,255,255,0.8), rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 850px 220px, rgba(255,255,255,0.8), rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 230px 750px, rgba(255,255,255,0.8), rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 920px 540px, rgba(255,255,255,0.8), rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0.3;
+            animation: starsMove 50s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes starsMove {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100px); }
+        }
+
+        /* ===== LỚP PHỦ ===== */
+        .overlay {
+            position: relative;
+            z-index: 10;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* ===== POPUP SIÊU CẤP ===== */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .popup.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .popup-card {
+            background: var(--secondary);
+            width: 90%;
+            max-width: 420px;
+            border-radius: var(--border-radius);
+            padding: 32px 24px;
+            position: relative;
+            border: 1px solid var(--accent);
+            box-shadow: var(--shadow), 0 0 0 2px rgba(200,169,95,0.1) inset;
+            animation: slideUpScale 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUpScale {
+            0% { transform: scale(0.8) translateY(50px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .close-popup:hover {
+            background: var(--accent);
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        .popup-icon {
+            font-size: 64px;
+            text-align: center;
+            margin-bottom: 16px;
+            animation: floatEmoji 3s ease-in-out infinite;
+        }
+
+        @keyframes floatEmoji {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .popup-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 12px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .popup-message {
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 24px;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .donate-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(200,169,95,0.2);
+        }
+
+        .bank-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed rgba(200,169,95,0.2);
+        }
+
+        .bank-item:last-child {
+            border-bottom: none;
+        }
+
+        .bank-label {
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .bank-value {
+            color: var(--accent);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .thanks-text {
+            color: var(--success);
+            text-align: center;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        /* ===== HEADER SANG TRỌNG ===== */
+        .header {
+            background: rgba(26, 31, 48, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(200,169,95,0.2);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(200,169,95,0.1), transparent);
+            animation: shimmer 8s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg) translateY(0); }
+            100% { transform: rotate(360deg) translateY(0); }
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 10px rgba(200,169,95,0.3);
+            position: relative;
+        }
+
+        .header h1::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-2);
+            margin: 12px auto 0;
+            border-radius: 3px;
+        }
+
+        .header-sub {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 15px;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        /* ===== STATS ===== */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .stat-badge {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(200,169,95,0.3);
+            border-radius: 40px;
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .stat-badge:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+            box-shadow: 0 5px 15px rgba(200,169,95,0.2);
+        }
+
+        .stat-icon {
+            font-size: 20px;
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* ===== TABS ===== */
+        .tabs-container {
+            background: rgba(26, 31, 48, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            padding: 6px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(200,169,95,0.2);
+            display: flex;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 14px 8px;
+            border: none;
+            background: transparent;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(200,169,95,0.3), transparent);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .tab:hover::before {
+            width: 200px;
+            height: 200px;
+        }
+
+        .tab.active {
+            background: var(--gradient-2);
+            color: var(--primary);
+            box-shadow: 0 5px 15px rgba(200,169,95,0.4);
+        }
+
+        /* ===== PROGRESS ===== */
+        .progress-card {
+            background: rgba(26, 31, 48, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(200,169,95,0.2);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .progress-percent {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .progress-track {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-2);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px var(--accent);
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmerProgress 2s infinite;
+        }
+
+        @keyframes shimmerProgress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-count {
+            text-align: right;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .progress-count span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* ===== CONTENT ===== */
+        .content {
+            display: block;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeSlide 0.4s ease;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== QUESTION CARDS ===== */
+        .question-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .question-card {
+            background: rgba(26, 31, 48, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(200,169,95,0.2);
+            transition: all 0.3s;
+            animation: cardAppear 0.5s ease backwards;
+        }
+
+        .question-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3), 0 0 0 1px var(--accent);
+        }
+
+        @keyframes cardAppear {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            background: rgba(0,0,0,0.2);
+            border-bottom: 1px solid rgba(200,169,95,0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .question-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary);
+            box-shadow: 0 5px 10px rgba(200,169,95,0.3);
+        }
+
+        .question-text {
+            color: var(--text);
+            font-weight: 500;
+            line-height: 1.5;
+            flex: 1;
+            font-size: 15px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+        }
+
+        .option:hover {
+            background: rgba(200,169,95,0.1);
+            border-color: var(--accent);
+            transform: translateX(8px);
+        }
+
+        .option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent);
+        }
+
+        .option.correct {
+            background: rgba(46, 204, 113, 0.2);
+            border-color: var(--success);
+            color: var(--text);
+        }
+
+        .option.incorrect {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: var(--danger);
+            color: var(--text);
+        }
+
+        .check-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 20px;
+            background: var(--gradient-2);
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(200,169,95,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .check-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .check-btn:hover::before {
+            left: 100%;
+        }
+
+        .check-btn:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(200,169,95,0.5);
+        }
+
+        .check-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-message {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 16px;
+            display: none;
+            animation: resultPop 0.3s ease;
+        }
+
+        @keyframes resultPop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .result-message.show {
+            display: block;
+        }
+
+        .correct-message {
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .incorrect-message {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        /* ===== DUNG SAI STYLES ===== */
+        .statement-item {
+            background: rgba(255,255,255,0.02);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(200,169,95,0.1);
+        }
+
+        .statement-text {
+            color: var(--text);
+            margin-bottom: 12px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .statement-options {
+            display: flex;
+            gap: 12px;
+        }
+
+        .statement-option {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+        }
+
+        .statement-option:hover {
+            background: rgba(200,169,95,0.1);
+            border-color: var(--accent);
+        }
+
+        .statement-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            border-top: 1px solid rgba(200,169,95,0.2);
+            position: relative;
+        }
+
+        .footer-quote {
+            color: var(--accent);
+            font-style: italic;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+              /* ===== DONATE BUTTON ===== */
+        .donate-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--gradient-2);
+            border: none;
+            color: var(--primary);
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(200,169,95,0.4);
+            z-index: 100;
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .donate-float:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 15px 35px rgba(200,169,95,0.6);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(200,169,95,0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(200,169,95,0); }
+            100% { box-shadow: 0 0 0 0 rgba(200,169,95,0); }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 380px) {
+            .header h1 { font-size: 28px; }
+            .stat-badge { padding: 8px 16px; }
+            .tab { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="stars"></div>
+
+    <!-- POPUP SIÊU CẤP -->
+    <div class="popup show" id="welcomePopup">
+        <div class="popup-card">
+            <button class="close-popup" onclick="closePopup()">✕</button>
+            <div class="popup-icon">🏆</div>
+            <h2 class="popup-title">CHÀO SĨ TỬ!</h2>
+            <div class="popup-message">
+                Tôi đã dành hơn 100 giờ để biên soạn bộ câu hỏi này.<br>
+                Nếu thấy có giá trị, hãy ủng hộ tôi nhé!
+            </div>
+            
+            <div class="donate-card">
+                <div class="bank-item">
+                    <span class="bank-label">🏦 MB Bank</span>
+                    <span class="bank-value">0985-658-044</span>
+                </div>
+                <div class="bank-item">
+                    <span class="bank-label">👤 Chủ tài khoản</span>
+                    <span class="bank-value">TRẦN ĐÌNH CƯỜNG</span>
+                </div>
+                <div class="bank-item">
+                    <span class="bank-label">📱 ZALOPAY</span>
+                    <span class="bank-value">0985-658-044</span>
+                </div>
+                <div class="bank-item">
+                    <span class="bank-label">💎 Nội dung</span>
+                    <span class="bank-value">UNG HO ON TAP</span>
+                </div>
+            </div>
+            
+            <div class="thanks-text">
+                ⚡ Cảm ơn bạn! Chúc bạn đỗ điểm cao! ⚡
+            </div>
+        </div>
+    </div>
+
+    <!-- NỘI DUNG CHÍNH -->
+    <div class="overlay">
+        <!-- HEADER -->
+        <header class="header">
+            <h1>LỊCH SỬ 11</h1>
+            <div class="header-sub">GIỮA HỌC KÌ II</div>
+            
+            <div class="stats-container">
+                <div class="stat-badge">
+                    <span class="stat-icon">📝</span>
+                    <span class="stat-number">56</span>
+                    <span class="stat-label">TN</span>
+                </div>
+                <div class="stat-badge">
+                    <span class="stat-icon">✅</span>
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">Đ/S</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- TABS -->
+        <div class="tabs-container">
+            <button class="tab active" onclick="switchTab('tracnghiem')">TRẮC NGHIỆM</button>
+            <button class="tab" onclick="switchTab('dungsai')">ĐÚNG / SAI</button>
+        </div>
+
+        <!-- PROGRESS -->
+        <div class="progress-card">
+            <div class="progress-header">
+                <span>TIẾN ĐỘ ÔN TẬP</span>
+                <span class="progress-percent" id="progressPercent">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-count">
+                Đã làm: <span id="progressCount">0</span>/64 câu
+            </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- TRẮC NGHIỆM SECTION -->
+            <div id="tracnghiem" class="section active">
+                <div class="question-grid" id="tracnghiemContainer"></div>
+            </div>
+
+            <!-- ĐÚNG/SAI SECTION -->
+            <div id="dungsai" class="section">
+                <div class="question-grid" id="dungsaiContainer"></div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-quote">"Dân ta phải biết sử ta"</div>
+            <div>© 2026 • KIỆT TÁC ÔN THI</div>
+        </footer>
+    </div>
+
+    <!-- NÚT DONATE -->
+    <button class="donate-float" onclick="showPopup()">❤️</button>
+
+    <script>
+        // DỮ LIỆU TRẮC NGHIỆM (56 câu)
+        const tracnghiemData = [
+            { id: 1, question: "Ở In-đô-nê-xi-a, cuộc khởi nghĩa của Hoàng tử Đi-pô-nê-gô-rô đã", options: ["A. thất bại, In-đô-nê-xi-a trở thành thuộc địa của thực dân Hà Lan.", "B. thành công, lật đổ ách cai trị của thực dân Pháp, giành độc lập.", "C. thất bại, nhưng gây tổn thất nặng nề cho chính quyền thực dân.", "D. thành công, lật đổ ách cai trị của thực dân Hà Lan, giành độc lập."], correct: 0 },
+            { id: 2, question: "Trong những năm cuối thế kỉ XIX - đầu thế kỉ XX, nhân dân Cam-pu-chia không tiến hành cuộc khởi nghĩa nào sau đây?", options: ["A. Khởi nghĩa của A-cha-xoa (1863 - 1866).", "B. Khởi nghĩa của nhà sư Pu-côm-bô (1866 - 1867).", "C. Khởi nghĩa của Hoàng thân Si-vô-tha (1861 - 1892).", "D. Khởi nghĩa của Hoàng tử Đi-pô-nê-gô-rô (1825 - 1830)."], correct: 3 },
+            { id: 3, question: "Trong những năm cuối thế kỉ XIX - đầu thế kỉ XX, nhân dân Việt Nam nổi dậy đấu tranh chống lại ách cai trị của", options: ["A. thực dân Anh.", "B. thực dân Pháp.", "C. thực dân Tây Ban Nha.", "D. thực dân Hà Lan."], correct: 1 },
+            { id: 4, question: "Nội dung nào sau đây không phản ánh đúng tác động tiêu cực từ chính sách cai trị của thực dân phương Tây đến nền kinh tế của các nước Đông Nam Á?", options: ["A. Phần lớn các nước Đông Nam Á vẫn là những nước nông nghiệp lạc hậu.", "B. Kinh tế lạc hậu, thiếu cân đối giữa các ngành kinh tế, giữa các địa phương.", "C. Phương thức sản xuất tư bản chủ nghĩa thay thế quan hệ sản xuất phong kiến.", "D. Đông Nam Á trở thành thị trường tiêu thụ hàng hóa của thực dân phương Tây."], correct: 2 },
+            { id: 5, question: "Nội dung nào sau đây phản ánh đúng tác động tích cực từ chính sách cai trị của thực dân phương Tây đến khu vực Đông Nam Á?", options: ["A. Kinh tế phát triển với tốc độ nhanh, quy mô lớn.", "B. Thúc đẩy phát triển một số yếu tố về văn hóa.", "C. Đặt cơ sở hình thành nền văn hóa truyền thống.", "D. Giải quyết triệt để các mâu thuẫn trong xã hội."], correct: 1 },
+                { id: 6, question: "Trong những năm cuối thế kỉ XIX - đầu thế kỉ XX, nhân dân Mi-an-ma nổi dậy đấu tranh chống lại ách cai trị của", options: ["A. thực dân Anh.", "B. thực dân Pháp.", "C. thực dân Tây Ban Nha.", "D. thực dân Hà Lan."], correct: 0 },
+    { id: 7, question: "Để áp đặt được ách đô hộ trên toàn bộ đất nước Việt Nam, thực dân Pháp đã phải mất", options: ["A. 30 năm.", "B. 28 năm.", "C. 26 năm.", "D. 24 năm."], correct: 2 },
+    { id: 8, question: "Nguyên nhân quyết định khiến thực dân Pháp không thực hiện được âm mưu đánh nhanh thắng nhanh trong quá trình xâm lược Việt Nam (1858 - 1884) là", options: ["A. quân Pháp từ xa đến, không quen khí hậu, địa hình Việt Nam.", "B. quan quân triều đình nhà Nguyễn có chiến thuật đánh Pháp độc đáo.", "C. triều đình nhà Nguyễn kiên định lãnh đạo nhân dân kháng chiến.", "D. Pháp vấp phải sự kháng cự quyết liệt của nhân dân Việt Nam."], correct: 3 },
+    { id: 9, question: "Điểm nổi bật trong phong trào đấu tranh giành độc lập dân tộc ở Đông Nam Á từ cuối thế kỉ XIX đến năm 1920 là gì?", options: ["A. Phong trào theo khuynh hướng tư sản dần thay thế phong trào theo ý thức hệ phong kiến.", "B. Phong trào theo ý thức hệ phong kiến thay thế phong trào theo khuynh hướng tư sản.", "C. Tồn tại song song hai khuynh hướng tư sản và vô sản trong phong trào yêu nước.", "D. Phong trào đấu tranh theo khuynh hướng vô sản chiếm ưu thế tuyệt đối."], correct: 0 },
+    { id: 10, question: "Vào cuối thế kỉ XIX - đầu thế kỉ XX, tại Đông Nam Á, phong trào giải phóng dân tộc theo xu hướng tư sản diễn ra sớm nhất ở", options: ["A. Việt Nam, Cam-pu-chia, Lào.", "B. Thái Lan, Việt Nam, Lào.", "C. In-đô-nê-xi-a, Mi-an-ma, Phi-líp-pin.", "D. Phi-líp-pin, Thái Lan, Việt Nam."], correct: 2 },
+    { id: 11, question: "Các đảng cộng sản được thành lập ở một số nước: Inđônêxia (1920), Việt Nam, Mã Lai, Xiêm và Philíppin (trong những năm 30 của thế kỉ XX) đã", options: ["A. mở ra khuynh hướng tư sản trong cuộc đấu tranh giành độc lập dân tộc.", "B. mở ra khuynh hướng vô sản trong cuộc đấu tranh giành độc lập dân tộc.", "C. khẳng định sự thắng thế của khuynh hướng vô sản trong phong trào đấu tranh.", "D. khẳng định sự thắng thế của khuynh hướng tư sản trong phong trào đấu tranh."], correct: 1 },
+    { id: 12, question: "Trong những năm 1945 - 1975, nhân dân các nước Đông Dương tiếp tục đấu tranh chống lại những thế lực ngoại xâm nào?", options: ["A. Thực dân Pháp và thực dân Anh.", "B. Thực dân Anh và thực dân Hà Lan.", "C. Thực dân Pháp và đế quốc Mĩ.", "D. Thực dân Anh và thực dân Tây Ban Nha"], correct: 2 },
+    { id: 13, question: "Một trong những nội dung của lịch sử Đông Nam Á những năm 1945 - 1984 là", options: ["A. các nước lần lượt hoàn thành cuộc đấu tranh giành độc lập dân tộc.", "B. tất cả các nước tham gia vào Hiệp hội các quốc gia Đông Nam Á.", "C. các nước lần lượt trở thành thuộc địa của thực dân phương Tây.", "D. thực dân phương Tây quay lại tái chiếm Đông Nam Á."], correct: 0 },
+    { id: 14, question: "Nội dung nào sau đây không phản ánh đúng tác động từ chính sách 'chia để trị' của thực dân phương Tây đối với khu vực Đông Nam Á?", options: ["A. Tranh chấp biên giới.", "B. Xung đột sắc tộc, tôn giáo.", "C. Tranh chấp lãnh thổ.", "D. Gắn kết khu vực và thế giới."], correct: 3 },
+    { id: 15, question: "Chính sách nô dịch, áp đặt văn hóa ngoại lai của chính quyền thực dân tác động như thế nào đến nền văn hóa các dân tộc ở Đông Nam Á?", options: ["A. Cư dân Đông Nam Á được khai hóa văn minh.", "B. Thúc đẩy sự hòa hợp tôn giáo ở nhiều nước.", "C. Xói mòn những giá trị văn hóa truyền thống.", "D. Đặt cơ sở hình thành nền văn hóa truyền thống."], correct: 2 },
+    { id: 16, question: "Cuối thế kỉ XIX - đầu thế kỉ XX, mâu thuẫn bao trùm trong xã hội Đông Nam Á là mâu thuẫn giữa", options: ["A. nhân dân Đông Nam Á với thực dân xâm lược.", "B. giai cấp nông dân và địa chủ phong kiến.", "C. giai cấp tư sản với chính quyền thực dân.", "D. giai cấp vô sản và giai cấp tư sản."], correct: 0 },
+    { id: 17, question: "Từ giữa những năm 50 đến giữa những năm 60 của thế kỉ XX, nhóm năm nước sáng lập ASEAN đã tiến hành chiến lược kinh tế nào sau đây?", options: ["A. Công nghiệp hóa thay thế nhập khẩu.", "B. Công nghiệp hóa lấy xuất khẩu làm chủ đạo.", "C. Công nghiệp hóa, điện khí hóa toàn quốc.", "D. Quốc hữu hóa các doanh nghiệp nước ngoài."], correct: 0 },
+    { id: 18, question: "Từ giữa những năm 60 đến cuối những năm 80 của thế kỉ XX, nhóm năm nước sáng lập ASEAN đã tiến hành chiến lược kinh tế nào sau đây?", options: ["A. Công nghiệp hóa thay thế nhập khẩu.", "B. Công nghiệp hóa lấy xuất khẩu làm chủ đạo.", "C. Công nghiệp hóa, điện khí hóa toàn quốc.", "D. Quốc hữu hóa các doanh nghiệp nước ngoài."], correct: 1 },
+    { id: 19, question: "Đến cuối những năm 80 của thế kỉ XX, các nước Việt Nam, Lào, cam-pu-chia bắt đầu", options: ["A. lựa chọn con đường phát triển đất nước theo hướng xã hội chủ nghĩa.", "B. tiến hành công nghiệp hóa, từng bước chuyển sang nền kinh tế thị trường.", "C. đẩy mạnh xây dựng nền kinh tế kế hoạch hóa tập trung, quan liêu, bao cấp.", "D. cải cách đất nước một cách toàn diện, trong đó đổi mới chính trị là trọng tâm."], correct: 1 },
+    { id: 20, question: "Quốc gia nào ở Đông Nam Á được coi là một trong 4 'con rồng' của kinh tế châu Á?", options: ["A. Việt Nam.", "B. Thái Lan.", "C. Xin-ga-po.", "D. In-đô-nê-xi-a."], correct: 2 },
+    { id: 21, question: "Trong nhiều thế kỉ, lãnh thổ Việt Nam thường xuyên là đối tượng nhòm ngó, can thiệp hoặc xâm lược của các thế lực bên ngoài do Việt Nam có", options: ["A. vị trí địa lí chiến lược.", "B. trình độ dân trí thấp.", "C. nền văn hóa lạc hậu.", "D. nền kinh tế lạc hậu."], correct: 0 },
+    { id: 22, question: "Nội dung nào sau đây không phản ánh đúng vị trí địa lí chiến lược của Việt Nam?", options: ["A. Là cầu nối giữa Trung Quốc với khu vực Đông Nam Á.", "B. Nằm trên các trục đường giao thông quốc tế huyết mạch.", "C. Là cầu nối giữa Đông Nam Á lục địa với Đông Nam Á hải đảo.", "D. Kiểm soát tuyến đường thương mại giữa Ấn Độ và Đông Nam Á."], correct: 3 },
+    { id: 23, question: "Ngô Quyền đã lựa chọn địa điểm nào làm trận địa chống quân Nam Hán xâm lược (năm 938)?", options: ["A. Cửa sông Tô Lịch.", "B. Cửa sông Bạch Đằng.", "C. Hoan Châu (Nghệ An).", "D. Đường Lâm (Hà Nội)."], correct: 1 },
+    { id: 24, question: "Một trong những nguyên nhân dẫn đến thắng lợi của cuộc kháng chiến chống Tống (năm 981) là do", options: ["A. có sự lãnh đạo của các tướng lĩnh tài ba như: Lê Sát, Lê Ngân, Nguyễn Trãi.", "B. quân dân Tiền Lê vận dụng thành công kế sách 'Tiên phát chế nhân' của nhà Lý.", "C. quân dân Tiền Lê có tinh thần yêu nước, kiên quyết đấu tranh chống ngoại xâm.", "D. quân Tống liên tiếp thất bại nên chủ động giảng hòa với nhà Tiền Lê."], correct: 2 },
+    { id: 25, question: "Nội dung nào sau đây không phản ánh đúng ý nghĩa của cuộc kháng chiến chống Tống thời Tiền Lê?", options: ["A. Buộc nhà Tống thần phục và thực hiện triều cống đối với Đại Cồ Việt.", "B. Thể hiện ý chí quyết tâm chống ngoại xâm của quân dân Đại Cồ Việt.", "C. Quét sạch quân thù ra khỏi bờ cõi, củng cố vững chắc nền độc lập.", "D. Thể hiện khả năng bảo vệ độc lập của quân dân Đại Cồ Việt."], correct: 0 },
+    { id: 26, question: "Đầu năm 1076, hàng chục vạn quân Tống chia làm hai đạo tiến vào Đại Việt. Trên đường tiến quân về Thăng Long, quân Tống đã bị chặn lại ở", options: ["A. thành Đa Bang.", "B. cửa sông Bạch Đằng.", "C. thành Tây Đô.", "D. bờ bắc sông Như Nguyệt"], correct: 3 },
+    { id: 27, question: "Năm 1075, Lý Thường Kiệt lãnh đạo quân dân nhà Lý tiến đánh sang đất Tống nhằm mục đích gì?", options: ["A. Xâm chiếm đất đai để mở rộng lãnh thổ Đại Việt.", "B. Đòi lại phần đất mà trước kia nhà Tống chiếm giữ.", "C. Buộc nhà Tống phải thần phục và cống nạp cho Đại Việt.", "D. Đánh vào nơi tập trung lương thực và vũ khí của nhà Tống."], correct: 3 },
+    { id: 28, question: "Nội dung nào không phản ánh đúng nguyên nhân xâm lược Đại Việt của nhà Tống vào năm 1076?", options: ["A. Đòi lại những vùng đất mà trước kia đã bị Đại Việt chiếm giữ.", "B. Thỏa mãn tham vọng bành trướng lãnh thổ xuống phía Nam.", "C. Tăng vị thế của nhà Tống, khiến hai nước Liêu, Hạ phải kiêng nể.", "D. Đánh Đại Việt để góp phần dẹp yên mâu thuẫn trong nội bộ nước Tống."], correct: 0 },
+    { id: 29, question: "Năm 1279, nhà Nguyên đã chiếm được toàn bộ lãnh thổ Trung Quốc và ráo riết chuẩn bị lực lượng để xâm lược Đại Việt. Trước tình hình đó, nhà Trần đã", options: ["A. triệu tập hội nghị Bình Than và Diên Hồng để bàn kế sách đánh giặc.", "B. chủ động xây dựng phòng tuyến trên sông Như Nguyệt để chặn giặc.", "C. cho quân tấn công sang đất nhà Nguyên để chặn trước thế mạnh của giặc.", "D. xây dựng nhiều thành lũy kiên cố, như: thành Đa Bang, thành Tây Đô,…"], correct: 0 },
+    { id: 30, question: "Nhà Thanh dựa vào duyên cớ nào để tiến quân xâm lược Đại Việt vào năm 1788?", options: ["A. Lê Chiêu Thống cầu cứu nhà Thanh để chống lại quân Tây Sơn.", "B. Quân Tây Sơn quấy nhiễu, xâm phạm lãnh thổ của Mãn Thanh.", "C. Nguyễn Ánh cầu cứu nhà Thanh để chống lại quân Tây Sơn.", "D. Chính quyền Lê - Trịnh lấn chiếm lãnh thổ của nhà Thanh."], correct: 0 },
+    { id: 31, question: "Nhà Minh lấy cớ gì để đem quân sang xâm lược Đại Ngu?", options: ["A. Nhà Hồ cướp ngôi nhà Trần.", "B. Nhà Hồ cho quân xâm lấn lãnh thổ nhà Minh.", "C. Nhà Hồ không cử sứ giả sang xin sắc phong.", "D. Nhà Hồ không thần phục, cống nạp nhà Minh."], correct: 0 },
+    { id: 32, question: "Cuộc kháng chiến chống quân Tống trên sông Bạch Đằng do ai chỉ huy?", options: ["A. Ngô Quyền", "B. Lê Đại Hành", "C. Trần Quốc Tuấn", "D. Nguyễn Trãi"], correct: 1 },
+    { id: 33, question: "Cuộc khởi nghĩa nào dưới đây đã mở ra thời kì đấu tranh giành độc lập, tự chủ của người Việt dưới thời Bắc thuộc?", options: ["A. Khởi nghĩa Mai Thúc Loan.", "B. Khởi nghĩa Hai Bà Trưng.", "C. Khởi nghĩa Phùng Hưng.", "D. Khởi nghĩa Bà Triệu."], correct: 1 },
+    { id: 34, question: "Cuộc khởi nghĩa của Hai Bà Trưng đã", options: ["A. giành và giữ được chính quyền độc lập trong khoảng 60 năm.", "B. thắng lợi, lật đổ ách cai trị của nhà Ngô, giành độc lập dân tộc.", "C. chấm dứt thời kì Bắc thuộc, mở ra thời kì độc lập, tự chủ lâu dài.", "D. thể hiện tinh thần yêu nước, ý chí anh hùng của phụ nữ Việt Nam."], correct: 3 },
+    { id: 35, question: "Ai là tác giả của câu nói nổi tiếng: 'Tôi muốn cưỡi cơn gió mạnh, đạp luồng sóng dữ, chém cá kình ở bể Đông, chứ không thèm bắt chước người đời cúi đầu cong lưng để làm tì thiếp người ta'?", options: ["A. Lê Chân.", "B. Bùi Thị Xuân.", "C. Triệu Thị Trinh.", "D. Nguyễn Thị Định."], correct: 2 },
+    { id: 36, question: "Việc những người phụ nữ như: Trưng Trắc, Trưng Nhị, Triệu Thị Trinh,.. lãnh đạo các cuộc khởi nghĩa lớn nhằm giành lại nền độc lập, tự chủ đã cho thấy", options: ["A. vai trò, vị trí quan trọng và nổi bật của phụ nữ trong xã hội đương thời.", "B. sự áp đảo và thắng lợi của chế độ mẫu quyền trước chế độ phụ quyền.", "C. nam giới không có vai trò, vị trí gì trong đời sống chính trị đương thời.", "D. vai trò quyết định của người phụ nữ trong đời sống chính trị đương thời."], correct: 0 },
+    { id: 37, question: "Năm 544, Lý Bí tự xưng là Lý Nam Đế, lập ra nhà nước", options: ["A. Vạn An.", "B. Đại Nam.", "C. Đại Việt.", "D. Vạn Xuân."], correct: 3 },
+    { id: 38, question: "Cuộc khởi nghĩa Hai Bà Trưng (40 - 43) và khởi nghĩa Lý Bí (542 - 603) đều", options: ["A. giành và giữ được chính quyền độc lập trong gần 60 năm.", "B. diễn ra qua hai giai đoạn: khởi nghĩa và kháng chiến.", "C. giành thắng lợi, khôi phục được nền độc lập của người Việt.", "D. chống lại ách cai trị hà khắc, tàn bạo của nhà Lương."], correct: 1 },
+    { id: 39, question: "Năm 776, Phùng Hưng đã lãnh đạo người Việt nổi dậy đấu tranh chống lại ách cai trị của", options: ["A. nhà Hán.", "B. nhà Ngô.", "C. nhà Tùy.", "D. nhà Đường."], correct: 3 },
+    { id: 40, question: "Khúc Thừa Dụ đã tận dụng cơ hội nào dưới đây để dấy binh khởi nghĩa giành lại quyền tự chủ cho người Việt (vào năm 905)?", options: ["A. Nhà Đường không bố trí quân đồn trú tại thành Đại La.", "B. Nhà Đường suy yếu nên khó kiểm soát tình hình An Nam.", "C. Nhà Ngô chưa thiết lập được chính quyền đô hộ ở Việt Nam.", "D. Chính quyền đô hộ của nhà Đường mới được thiết lập, còn lỏng lẻo."], correct: 1 },
+    { id: 41, question: "Điểm tương đồng trong đường lối chỉ đạo chiến đấu giữa cuộc kháng chiến chống Tống thời Lý và khởi nghĩa Lam Sơn là gì?", options: ["A. Phòng ngự tích cực thông qua chiến thuật 'vườn không nhà trống'.", "B. Triệt để thực hiện kế sách đánh nhanh thắng nhanh, tấn công thần tốc.", "C. Chủ động giảng hòa để kết thúc chiến tranh, tránh thiệt hại cho cả hai bên.", "D. Chủ động tiến công để chặn trước thế mạnh của địch ('tiên phát chế nhân')."], correct: 3 },
+    { id: 42, question: "Năm 1424, Nguyễn Chích đề nghị nghĩa quân Lam Sơn tạm rời núi rừng Thanh Hóa, chuyển quân", options: ["A. ra Đông Đô.", "B. vào Nghệ An.", "C. vào Hà Tĩnh.", "D. lên núi Chí Linh."], correct: 1 },
+    { id: 43, question: "Trong giai đoạn đầu của khởi nghĩa (1418 -1423), nghĩa quân Lam Sơn ở trong tình trạng thế nào?", options: ["A. Lực lượng nghĩa quân đông đảo và hùng mạnh.", "B. Lực lượng nghĩa quân còn yếu, gặp nhiều khó khăn.", "C. Liên tiếp giành thắng lợi, buộc địch phải rút quân.", "D. Giành nhiều thắng lợi, địa bàn hoạt động được mở rộng."], correct: 1 },
+    { id: 44, question: "Cuối năm 1426, nghĩa quân Lam Sơn đã giành chiến thắng ở", options: ["A. Chi Lăng - Xương Giang.", "B. Ngọc Hồi - Đống Đa.", "C. Tốt Động - Chúc Động.", "D. Rạch Gầm - Xoài Mút."], correct: 2 },
+    { id: 45, question: "'Lấy nhân nghĩa để thắng hung tàn, đem chí nhân mà thay cường bạo' là tư tưởng chỉ đạo của cuộc khởi nghĩa nào?", options: ["A. Khởi nghĩa Hai Bà Trưng", "B. Khởi nghĩa Lam Sơn", "C. Khởi nghĩa Lý Bí", "D. Phong trào Tây Sơn"], correct: 1 },
+    { id: 46, question: "Sự suy yếu, khủng hoảng của chính quyền phong kiến chúa Nguyễn ở Đàng Trong vào giữa thế kỉ XVIII đã dẫn đến hậu quả gì?", options: ["A. Nông dân Đàng Trong vùng lên khởi nghĩa chống lại chính quyền.", "B. Tạo điều kiện thuận lợi cho nhà Minh xâm lược lãnh thổ Đại Việt.", "C. Bùng nổ cuộc khởi nghĩa của Hoàng Công Chất ở vùng Điện Biên.", "D. Tạo điều kiện cho thực dân Pháp mở rộng xâm lược Việt Nam."], correct: 0 },
+    { id: 47, question: "Với việc đánh đổ các tập đoàn phong kiến Lê - Trịnh, Nguyễn, phong trào Tây Sơn đã có đóng góp gì cho lịch sử dân tộc?", options: ["A. Hoàn thành việc thống nhất đất nước sau nhiều thế kỉ bị chia cắt.", "B. Xóa bỏ sự chia cắt Đàng Trong - Đàng Ngoài, bước đầu thống nhất đất nước.", "C. Hoàn thành sự nghiệp thống nhất đất nước và bảo vệ vững chắc độc lập dân tộc.", "D. Thiết lập vương triều mới (Tây Sơn) tiến bộ hơn chính quyền Lê - Trịnh, Nguyễn."], correct: 1 },
+    { id: 48, question: "Nội dung nào sau đây không phản ánh đúng bài học lịch sử rút ra từ các cuộc khởi nghĩa và chiến tranh giải phóng trong lịch sử dân tộc Việt Nam?", options: ["A. Luôn nhân nhượng kẻ thù xâm lược để giữ môi trường hòa bình.", "B. Chú trọng việc xây dựng và củng cố khối đại đoàn kết toàn dân.", "C. Tiến hành chiến tranh nhân dân, thực hiện 'toàn dân đánh giặc'.", "D. Phát động khẩu hiệu đấu tranh phù hợp để tập hợp lực lượng."], correct: 0 },
+    { id: 49, question: "Bài học về việc xây dựng và củng cố lực lượng trong giai đoạn đầu của khởi nghĩa Lam Sơn có giá trị như thế nào đối với sự nghiệp bảo vệ Tổ quốc hiện nay?", options: ["A. Phải luôn chuẩn bị lực lượng, không được chủ quan, mất cảnh giác", "B. Chỉ cần tập trung xây dựng quân đội chính quy, tinh nhuệ", "C. Phải dựa hoàn toàn vào sự giúp đỡ của các nước bạn bè", "D. Có thể tạm thời hòa hoãn với kẻ thù để kéo dài thời gian"], correct: 0 },
+    { id: 50, question: "Nội dung nào sau đây không phải là bài học lịch sử của các cuộc khởi nghĩa và chiến tranh giải phóng dân tộc của nhân dân ta (từ thế kỉ III TCN đến cuối thế kỉ XIX)?", options: ["A. Nâng cao sức năng lực lãnh đạo của Đảng.", "B. Xây dựng khối đại đoàn kết toàn dân.", "C. Nghệ thuật quân sự đánh giặc giữ nước.", "D. Xây dựng lực lượng chống giặc ngoại xâm."], correct: 0 },
+    { id: 51, question: "Một trong những đặc điểm nổi bật về nghệ thuật quân sự của các cuộc khởi nghĩa trong lịch sử Việt Nam từ thế kỉ III TCN đến cuối thế kỉ XIX là", options: ["A. lấy ít địch nhiều", "B. lấy lực thắng thế", "C. vườn không nhà trống", "D. tiên phát chế nhân"], correct: 0 },
+    { id: 52, question: "Chiến thắng nào đã kết thúc hoàn toàn hơn 1.000 năm đô hộ của phong kiến phương Bắc, mở ra thời kì độc lập, tự chủ lâu dài của dân tộc?", options: ["A. Cuộc nổi dậy năm 931 do Khúc Thừa Dụ lãnh đạo", "B. Trận chiến trên sông Bạch Đằng năm 938 do Ngô Quyền lãnh đạo.", "C. Trận chiến trên sông Bạch Đằng năm 981 do Lê Hoàn lãnh đạo", "D. Trận chiến chống quân Tống xâm lược năm 1077 do Lý Thường Kiệt lãnh đạo"], correct: 1 },
+    { id: 53, question: "Nội dung nào sau đây không phản ánh đúng mục đích của Lê Lợi, Nguyễn Trãi khi tạm thời hòa hoãn với quân Minh (1423)?", options: ["A. Tranh thủ thời gian để tích trữ lương thảo, tranh thủ sức dân.", "B. Cầu hòa vì thiếu tướng tài và tinh thần chiến đấu của binh sĩ sa sút.", "C. Tranh thủ thời gian để củng cố lực lượng và sức mạnh của nghĩa quân.", "D. Tranh thủ thời gian để tìm phương hướng mới cho cuộc khởi nghĩa."], correct: 1 },
+    { id: 54, question: "Từ tháng 9/1426, cuộc khởi nghĩa Lam Sơn đã chuyển sang giai đoạn nào?", options: ["A. Cố thủ, chờ viện binh.", "B. Phản công quân Minh.", "C. Xây dựng lực lượng.", "D. Tạm hòa với quân Minh."], correct: 1 },
+    { id: 55, question: "Năm 1424, nghĩa quân Lam Sơn chuyển hướng vào phía nam, đánh chiếm Nghệ An, vì", options: ["A. quân Minh không bố trí lực lượng chiếm giữ tại Nghệ An.", "B. Nghệ An là vùng đồng bằng rộng lớn, dân cư thưa thớt.", "C. quân Minh đã rút toàn bộ quân từ Nghệ An về Thanh Hóa.", "D. Nghệ An là nơi hiểm yếu, đất rộng, người đông."], correct: 3 },
+    { id: 56, question: "Nhận xét nào sau đây đúng nhất về các cuộc khởi nghĩa và chiến tranh giải phóng trong lịch sử Việt Nam?", options: ["A. Luôn giành thắng lợi hoàn toàn trước mọi kẻ thù.", "B. Thể hiện truyền thống yêu nước và tinh thần bất khuất của dân tộc.", "C. Chỉ có sự tham gia của tầng lớp quý tộc, quan lại.", "D. Không để lại bài học kinh nghiệm cho đời sau."], correct: 1 }
+];
+
+// DỮ LIỆU ĐÚNG/SAI
+const dungsaiData = [
+    { id: 1, question: "Đọc đoạn tư liệu sau: 'Trong suốt quá trình đấu tranh giành độc lập, các phong trào cách mạng ở Đông Nam Á đã có sự thay đổi về phương thức đấu tranh và đối tượng lãnh đạo. Từ những phong trào chủ yếu do giai cấp tư sản lãnh đạo, đã chuyển sang sự tham gia mạnh mẽ của giai cấp công nhân và nông dân vào những năm 1920.'", statements: [
+        "a) Các phong trào cách mạng ở Đông Nam Á chủ yếu do giai cấp công nhân và nông dân lãnh đạo từ đầu thế kỷ XIX.",
+        "b) Từ những phong trào cách mạng chủ yếu do giai cấp tư sản lãnh đạo, đến những năm 1920 giai cấp công nhân và nông dân tham gia lãnh đạo.",
+        "c) Giai cấp tư sản không tham gia vào các phong trào cách mạng ở Đông Nam Á.",
+        "d) Các phong trào cách mạng ở Đông Nam Á chỉ có sự tham gia của giai cấp công nhân, không có sự tham gia của nông dân."
+    ], correct: [false, true, false, false] },
+    { id: 2, question: "Đọc tư liệu sau: 'Sau gần 150 năm là thuộc địa của Anh, Xin-ga-po chỉ là một hải cảng trung chuyển hàng hoá, nền kinh tế hoàn toàn phụ thuộc vào thị trường bên ngoài, tỉ lệ thất nghiệp tăng cao. Thủ tướng Lý Quang Diệu cho rằng: \"Những gì mà người Xin-ga-po cần là sự trợ giúp tạo công ăn việc làm cho người lao động thông qua các ngành công nghiệp sản xuất chứ không phải là sự phụ thuộc vào những chuyến viện trợ liên tục… Chúng ta không thể sống bằng cái bát đi ăn xin\".'", statements: [
+        "a) Sau gần 150 năm làm thuộc địa của Anh, Xin-ga-po chủ yếu phát triển như một hải cảng trung chuyển hàng hoá và phụ thuộc vào thị trường bên ngoài.",
+        "b) Xin-ga-po có nền kinh tế tự chủ và không có vấn đề thất nghiệp.",
+        "c) Thủ tướng Lý Quang Diệu cho rằng việc phát triển ngành công nghiệp sản xuất là yếu tố quan trọng để tạo công ăn việc làm cho người lao động.",
+        "d) Thủ tướng Lý Quang Diệu khuyến khích sự phụ thuộc vào viện trợ liên tục để phát triển kinh tế."
+    ], correct: [true, false, true, false] },
+    { id: 3, question: "Đọc tư liệu sau: 'Trong tác phẩm Bản án chế độ thực dân Pháp, Nguyễn Ái Quốc viết: \"Nhân dân Đông Dương khẩn khoản đòi mở trường học vì trường học thiếu một cách nghiêm trọng… ‘Làm cho dân ngu để dễ trị’ đó là chính sách mà các nhà cầm quyền ở các thuộc địa của chúng ta ưa dùng nhất.\"'", statements: [
+        "a) Các nhà cầm quyền thực dân Pháp đã mở rộng hệ thống trường học ở Đông Dương để nâng cao trình độ dân trí.",
+        "b) Nguyễn Ái Quốc chỉ trích chính sách của thực dân Pháp khi cố tình làm cho dân ngu để dễ cai trị.",
+        "c) Chính sách giáo dục của thực dân Pháp ở Đông Dương đã giúp phát triển nền giáo dục cho nhân dân.",
+        "d) Nguyễn Ái Quốc khẳng định rằng thiếu trường học là một trong những nguyên nhân chính dẫn đến sự nghèo đói và lạc hậu ở Đông Dương."
+    ], correct: [false, true, false, true] },
+    { id: 4, question: "Đọc đoạn trích sau đây trong bài thơ 'Bình Ngô đại cáo' (Nguyễn Trãi): 'Ninh Kiều máu chảy thành sông, hôi tanh muôn dặm / Tốt Động thây phơi đầy nội, thối để nghìn thu / Tâm phúc giặc, Trần Hiệp phải bêu đầu / Sâu mọt dân, Lý Lượng cũng bỏ mạng / Vương Thông gỡ rối mà lửa lại càng bừng / Mã Anh cứu nguy mà giận càng thêm dữ'", statements: [
+        "a) Đoạn thơ trên phản ánh về cuộc kháng chiến chống quân xâm lược Tống của vương triều Lý.",
+        "b) Chiến thắng quân sự nổi bật được nhắc đến trong đoạn thơ trên là chiến thắng Tốt Động – Chúc Động.",
+        "c) Vương Thông, Mã Anh là những vị tướng chỉ huy tài giỏi của quân ta trong khởi nghĩa Lam Sơn.",
+        "d) Bình Ngô đại cáo được coi là bản tuyên ngôn độc lập thứ hai của nước ta sau 'Nam quốc sơn hà'."
+    ], correct: [false, true, false, true] },
+    { id: 5, question: "Đọc đoạn tư liệu sau: 'Cuộc khởi nghĩa Tây Sơn là cuộc nông dân khởi nghĩa duy nhất trong thời phong kiến Việt Nam đã đánh bại kẻ thù trong và ngoài nước (…). Phong trào đã lật đổ nền thống trị của các tập đoàn phong kiến phản động, kết thúc tình trạng phân chia đất nước kéo dài trên hai thế kỉ, đánh tan quân xâm lược Xiêm và Thanh, đặt cơ sở cho công cuộc khôi phục quốc gia thống nhất sau này'.", statements: [
+        "a) Đoạn trích phản ánh đóng góp của phong trào Tây Sơn đối với lịch sử dân tộc thế kỉ XVIII.",
+        "b) Khởi nghĩa Tây Sơn là cuộc khởi nghĩa nông dân duy nhất trong lịch sử phong kiến Việt Nam.",
+        "c) Một trong những công lao to lớn của phong trào Tây Sơn là lật đổ các tập đoàn phong kiến phản động, thống nhất hoàn toàn quốc gia.",
+        "d) Khởi nghĩa Tây Sơn đã đánh tan quân xâm lược đến từ phương Tây, bảo vệ vững chắc độc lập dân tộc."
+    ], correct: [true, false, false, false] },
+    { id: 6, question: "Đọc các đoạn tư liệu sau: Tư liệu 1: Sử gia Lê Văn Hưu nói: 'Trưng Trắc, Trưng Nhị là đàn bà, hô một tiếng mà các quận Cửu Chân, Nhật Nam, Hợp Phố cùng 65 thành ở Lĩnh Ngoại đều hưởng ứng, việc dựng nước xưng vương dễ như trở bàn tay, có thể thấy hình thế đất Việt ta đủ dựng được nghiệp bá vương'. Tư liệu 2: Bà quê ở huyện Quân An, quận Cửu Chân (Thanh Hoá ngày nay). Căm thù chính sách đồng hoá, áp bức và bóc lột tàn bạo của nhà Ngô, Bà đã nêu ý chí: 'Tôi muốn cưỡi cơn gió mạnh, đạp đường sóng giữ, chém cá tràng kình ở bể đông, quét sạch bờ cõi, để cứu dân ra khỏi nơi đắm đuối, chứ không thèm bắt chước người đời cúi đầu cong lưng để làm tì thiếp người ta'.", statements: [
+        "a) Đoạn tư liệu 2 nhắc đến nhân vật Trưng Trắc.",
+        "b) Triệu Thị Trinh lãnh đạo cuộc khởi nghĩa chống triều đại nhà Ngô (Trung Quốc).",
+        "c) Các cuộc khởi nghĩa được nhắc đến trong 2 đoạn tư liệu trên đều chống lại ách đô hộ của các triều đại phong kiến phương Bắc, trong thời kì nghìn năm Bắc thuộc.",
+        "d) Quy mô cuộc khởi nghĩa của Hai Bà Trưng rất rộng lớn, gồm các quận Cửu Chân, Nhật Nam, Hợp Phố cùng 65 thành ở Lĩnh Ngoại."
+    ], correct: [false, true, true, true] },
+    { id: 7, question: "Đọc đoạn tư liệu sau đây: 'Triều đình đã né tránh mọi giải pháp tích cực để giữ gìn nền độc lập, luôn hi vọng cầu hòa, sợ sệt, hoặc đôi khi lại mang tư tưởng cầu viện phương bắc để giải quyết vấn đề sống còn của đất nước'.", statements: [
+        "a) Triều Nguyễn đã tìm mọi cách để giữ gìn nền độc lập nhưng do vũ khí yếu kém nên phải chịu thất bại trước thực dân Pháp.",
+        "b) Tư liệu trên là nguyên nhân chung dẫn đến thất bại của các cuộc kháng chiến chống ngoại xâm trong lịch sử dân tộc Việt Nam.",
+        "c) Xây dựng đường lối kháng chiến đúng đắn và phát huy sức mạnh đoàn kết toàn dân là bài học lịch sử được rút ra từ cuộc kháng chiến chống thực dân Pháp của triều Nguyễn.",
+        "d) Trước sự xâm lược của ngoại bang, các triều đình phong kiến luôn cầu hòa phương bắc để giữ gìn nền độc lập."
+    ], correct: [false, false, true, false] },
+    { id: 8, question: "Đọc đoạn tư liệu sau đây: 'Vì vua tôi đồng tâm, anh em hòa mục, cả nước nhà góp sức, giặc phải bị bắt…., nó cậy trường trận, ta dựa vào đoản binh. Dùng đoản (binh) chế trường (trận) là sự thường của binh pháp. Nếu chỉ thấy quân nó kéo đến như lửa, như gió thì thế dễ chế ngự. Nếu nó tiến chậm như cách tằm ăn, không cầu thắng chóng, thì phải chọn dùng tướng giỏi, xem xét quyền biến, như đánh cờ vây, tùy thời tạo thế, có một đội quân một lòng như cha con thì mới dùng được. Vả lại, khoan thư sức dân để làm kế sâu rễ bền gốc, đó là thượng sách giữ nước vậy'.", statements: [
+        "a) Một trong những nguyên nhân dẫn đến sự thắng lợi trong cuộc đấu tranh bảo vệ tổ quốc là sự đoàn kết toàn dân, trên dưới đồng lòng quyết tâm chống giặc cứu nước.",
+        "b) Thắng lợi mọi kẻ thù xâm lược là nhờ sự lựa chọn các tướng chỉ huy giỏi, có cách đánh và nghệ thuật quân sự sáng tạo, tạo thế đánh nhanh thắng nhanh.",
+        "c) Nhân tố quyết định dẫn đến sự thắng lợi của các cuộc đấu tranh bảo vệ tổ quốc là truyền thống yêu nước và ý chí kiên cường bất khuất trong đấu tranh bảo vệ độc lập.",
+        "d) Đấu tranh bảo vệ tổ quốc là nhiệm vụ bắt buộc tất cả toàn dân tham gia đánh giặc, thời thế tạo anh hùng, tận dụng lợi thế địa hình sông, núi tạo thế lợi cho ta để đánh bại kẻ thù."
+    ], correct: [true, false, true, false] }
+];
+
+// BIẾN ĐẾM
+let tracNghiemAnswered = 0;
+let dungSaiAnswered = 0;
+
+// HÀM RENDER TRẮC NGHIỆM
+function renderTracNghiem() {
+    const container = document.getElementById('tracnghiemContainer');
+    if (!container) return;
+    
+    let html = '';
+    tracnghiemData.forEach(q => {
+        html += `
+            <div class="question-card" id="tn-${q.id}" style="animation-delay: ${q.id * 0.02}s">
+                <div class="card-header">
+                    <div class="question-number">${q.id}</div>
+                    <div class="question-text">${q.question}</div>
+                </div>
+                <div class="card-body">
+                    <div class="options" id="options-${q.id}">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option">
+                                <input type="radio" name="q${q.id}" value="${idx}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <button class="check-btn" onclick="checkTracNghiem(${q.id}, ${q.correct})" id="btn-${q.id}">KIỂM TRA</button>
+                    <div class="result-message" id="result-${q.id}"></div>
+                </div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+// HÀM RENDER ĐÚNG SAI
+function renderDungSai() {
+    const container = document.getElementById('dungsaiContainer');
+    if (!container) return;
+    
+    let html = '';
+    dungsaiData.forEach(q => {
+        html += `
+            <div class="question-card" id="ds-${q.id}" style="animation-delay: ${q.id * 0.02}s">
+                <div class="card-header">
+                    <div class="question-number">Đ/S ${q.id}</div>
+                    <div class="question-text">${q.question}</div>
+                </div>
+                <div class="card-body">
+                    <div class="options" id="ds-options-${q.id}">
+                        ${q.statements.map((stmt, idx) => `
+                            <div class="statement-item">
+                                <div class="statement-text">${stmt}</div>
+                                <div class="statement-options">
+                                    <label class="statement-option">
+                                        <input type="radio" name="ds${q.id}_${idx}" value="true"> ĐÚNG
+                                    </label>
+                                    <label class="statement-option">
+                                        <input type="radio" name="ds${q.id}_${idx}" value="false"> SAI
+                                    </label>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="check-btn" onclick="checkDungSai(${q.id})" id="ds-btn-${q.id}">KIỂM TRA</button>
+                    <div class="result-message" id="ds-result-${q.id}"></div>
+                </div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+// HÀM KIỂM TRA TRẮC NGHIỆM
+window.checkTracNghiem = function(id, correctIndex) {
+    const options = document.getElementsByName(`q${id}`);
+    let selectedValue = null;
+    
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].checked) {
+            selectedValue = parseInt(options[i].value);
+            break;
+        }
+    }
+    
+    const resultDiv = document.getElementById(`result-${id}`);
+    const btn = document.getElementById(`btn-${id}`);
+    
+    if (selectedValue === null) {
+        resultDiv.className = 'result-message show incorrect-message';
+        resultDiv.innerHTML = '⚠️ VUI LÒNG CHỌN ĐÁP ÁN!';
+        return;
+    }
+    
+    document.querySelectorAll(`#options-${id} .option`).forEach(opt => {
+        opt.classList.remove('correct', 'incorrect');
+    });
+    
+    const selectedOption = document.querySelectorAll(`#options-${id} .option`)[selectedValue];
+    const correctOption = document.querySelectorAll(`#options-${id} .option`)[correctIndex];
+    
+    if (selectedValue === correctIndex) {
+        selectedOption.classList.add('correct');
+        resultDiv.className = 'result-message show correct-message';
+        resultDiv.innerHTML = '✅ CHÍNH XÁC!';
+    } else {
+        selectedOption.classList.add('incorrect');
+        correctOption.classList.add('correct');
+        resultDiv.className = 'result-message show incorrect-message';
+        resultDiv.innerHTML = `❌ SAI! ĐÁP ÁN ĐÚNG: ${tracnghiemData.find(q => q.id === id).options[correctIndex]}`;
+    }
+    
+    btn.disabled = true;
+    if (!btn.dataset.answered) {
+        btn.dataset.answered = true;
+        tracNghiemAnswered++;
+        updateProgress();
+    }
+};
+
+// HÀM KIỂM TRA ĐÚNG SAI
+window.checkDungSai = function(id) {
+    const question = dungsaiData.find(q => q.id === id);
+    let allAnswered = true;
+    let correctCount = 0;
+    
+    for (let i = 0; i < question.statements.length; i++) {
+        const radios = document.getElementsByName(`ds${id}_${i}`);
+        let checked = false;
+        
+        for (let j = 0; j < radios.length; j++) {
+            if (radios[j].checked) {
+                checked = true;
+                const value = radios[j].value === 'true';
+                if (value === question.correct[i]) {
+                    correctCount++;
+                }
+                break;
+            }
+        }
+        
+        if (!checked) {
+            allAnswered = false;
+        }
+    }
+    
+    const resultDiv = document.getElementById(`ds-result-${id}`);
+    const btn = document.getElementById(`ds-btn-${id}`);
+    
+    if (!allAnswered) {
+        resultDiv.className = 'result-message show incorrect-message';
+        resultDiv.innerHTML = '⚠️ CHỌN ĐÁP ÁN CHO TẤT CẢ CÁC Ý!';
+        return;
+    }
+    
+    if (correctCount === question.statements.length) {
+        resultDiv.className = 'result-message show correct-message';
+        resultDiv.innerHTML = '✅ XUẤT SẮC! ĐÚNG HẾT!';
+    } else {
+        let answerHtml = '<div style="margin-top: 10px;"><strong>ĐÁP ÁN ĐÚNG:</strong><br>';
+        question.statements.forEach((stmt, idx) => {
+            answerHtml += `${stmt}: <strong style="color: ${question.correct[idx] ? '#2ecc71' : '#e74c3c'}">${question.correct[idx] ? 'ĐÚNG' : 'SAI'}</strong><br>`;
+        });
+        answerHtml += '</div>';
+        
+        resultDiv.className = 'result-message show incorrect-message';
+        resultDiv.innerHTML = `❌ ĐÚNG ${correctCount}/8 CÂU.` + answerHtml;
+    }
+    
+    btn.disabled = true;
+    if (!btn.dataset.answered) {
+        btn.dataset.answered = true;
+        dungSaiAnswered++;
+        updateProgress();
+    }
+};
+
+// HÀM CHUYỂN TAB
+window.switchTab = function(tabId) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+};
+
+// HÀM CẬP NHẬT PROGRESS
+function updateProgress() {
+    const total = tracnghiemData.length + dungsaiData.length;
+    const answered = tracNghiemAnswered + dungSaiAnswered;
+    const percent = Math.round((answered / total) * 100);
+    
+    const progressFill = document.getElementById('progressFill');
+    const progressPercent = document.getElementById('progressPercent');
+    const progressCount = document.getElementById('progressCount');
+    
+    if (progressFill) progressFill.style.width = percent + '%';
+    if (progressPercent) progressPercent.textContent = percent + '%';
+    if (progressCount) progressCount.textContent = answered;
+}
+
+// HÀM HIỂN THỊ POPUP
+window.showPopup = function() {
+    document.getElementById('welcomePopup').classList.add('show');
+};
+
+// HÀM ĐÓNG POPUP
+window.closePopup = function() {
+    document.getElementById('welcomePopup').classList.remove('show');
+};
+
+// ĐÓNG POPUP KHI CLICK BÊN NGOÀI
+window.onclick = function(event) {
+    const popup = document.getElementById('welcomePopup');
+    if (event.target === popup) {
+        popup.classList.remove('show');
+    }
+};
+
+// KHỞI TẠO
+document.addEventListener('DOMContentLoaded', function() {
+    renderTracNghiem();
+    renderDungSai();
+    
+    // TỰ ĐỘNG HIỂN THỊ POPUP SAU 1 GIÂY
+    setTimeout(() => {
+        showPopup();
+    }, 1000);
+});
+
+</script>
+</body>
+</html>
